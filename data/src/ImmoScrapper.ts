@@ -14,9 +14,9 @@ export class ImmoScrapper implements IScrapper<Flat> {
     let updated = 0;
 
     for (let i = 0; i < flats.length; i++) {
-      flats[i].lastCheck = lastCheck;
+      // flats[i].lastCheck = lastCheck;
 
-      const count = await this.destRepo.insertIfMissing(flats[i]);
+      const count = await this.destRepo.insertIfMissing(flats[i], lastCheck);
       if (count.upserted != 0) {
         upserted++;
       }

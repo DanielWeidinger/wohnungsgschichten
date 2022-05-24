@@ -33,13 +33,14 @@ export class MongoRepository implements IRepository<Flat> {
   }
 
   async insertIfMissing(
-    item: Flat
+    item: Flat,
+    lastCheck: Date
   ): Promise<{ upserted: number; updated: number }> {
     if (!this.flatsCollection) await this.init();
 
     const result = await this.flatsCollection?.updateOne(
       { id: item.id },
-      { $setOnInsert: item },
+      { $set: { lastCheck: lastCheck }, $setOnInsert: item },
       { upsert: true }
     );
 
