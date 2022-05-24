@@ -1,5 +1,8 @@
 from pymongo import DESCENDING
 from pymongo.mongo_client import MongoClient
+from pymongo.operations import UpdateOne
+
+from utils import indicies
 
 
 class MongoRepository:
@@ -13,5 +16,11 @@ class MongoRepository:
         latest_update = self.updates.find().sort(
             "datetime", DESCENDING).limit(1)[0]['timestamp']
 
-        flats = self.flats.find({'lastCheck': latest_update})
-        return list(flats)
+        flats = list(self.flats.find({'lastCheck': latest_update}))
+        return flats
+
+    def update_all(self, values):
+        bulk_updates = [UpdateOne({"_id": row["_id"]}, {
+            '$set': {i: row[i] for i in indicies}}) for row in values]
+        results = self.flats.bulk_write(bulk_updates)
+        return results.modified_count
