@@ -27,7 +27,6 @@ export class FlatsResolver {
   @Mutation((returns) => Int)
   async fetchLatestFlats() {
     const result = await this.immoScrapper.gatherAll();
-    console.log(result.length);
     return result.length;
   }
 }
