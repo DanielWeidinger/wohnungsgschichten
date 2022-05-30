@@ -1,8 +1,10 @@
+import { Service } from "typedi";
 import { IScrapper } from "./contracts/IScrapper";
 import { ImmoRepository } from "./ImmoRepository";
 import { Flat } from "./models/Flat";
 import { MongoRepository } from "./MongoRepository";
 
+@Service()
 export class ImmoScrapper implements IScrapper<Flat> {
   constructor(
     private sourceRepo: ImmoRepository,

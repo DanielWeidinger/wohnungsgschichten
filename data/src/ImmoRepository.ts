@@ -1,11 +1,13 @@
+import { Inject, Service } from "typedi";
 import { IRepository } from "./contracts/IRepository";
 import { Flat } from "./models/Flat";
 import { SearchQueries } from "./SearchQueries";
 const willhaben = require("willhaben");
 
+@Service()
 export class ImmoRepository implements IRepository<Flat> {
   constructor(
-    private _initialQuery: SearchQueries,
+    @Inject("immo.query") private _initialQuery: SearchQueries,
     private _queryAppendix?: string
   ) {}
   add(item: Flat): void {
