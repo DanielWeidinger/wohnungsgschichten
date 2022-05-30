@@ -14,6 +14,7 @@
     "analyze": "cem analyze --litelement",
     "start": "tsc && concurrently -k -r \"tsc --watch --preserveWatchOutput\" \"wds\"",
     "serve": "wds --watch",
+    "backend": "node ../data/dist/index.js",
     "tscw": "tsc -w",
     "build": "tsc && npm run analyze -- --exclude dist",
     "prepublish": "tsc && npm run analyze -- --exclude dist",
@@ -25,10 +26,18 @@
     "storybook:build": "tsc && npm run analyze -- --exclude dist && build-storybook"
   },
   "dependencies": {
+    "@apollo-elements/components": "^3.0.3",
+    "@apollo-elements/lit-apollo": "^5.0.3",
+    "@apollo/client": "^3.6.5",
     "@lion/button": "^0.17.0",
+    "@lion/collapsible": "^0.8.0",
     "@lion/core": "^0.22.0",
-    "lit": "^2.0.2",
-    "mongodb": "^4.6.0"
+    "apollo-link-rest": "^0.9.0-rc.1",
+    "graphql": "^15.8.0",
+    "graphql-anywhere": "^4.2.7",
+    "lit": "^2.2.5",
+    "mongodb": "^4.6.0",
+    "qs": "^6.10.3"
   },
   "devDependencies": {
     "@custom-elements-manifest/analyzer": "^0.4.17",

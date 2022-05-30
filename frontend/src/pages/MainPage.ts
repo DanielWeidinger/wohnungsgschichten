@@ -1,6 +1,18 @@
-import { css, html, LitElement, customElement, state } from '@lion/core';
+import { gql } from '@apollo/client/core';
+import { css, html } from '@apollo-elements/lit-apollo';
+import { customElement, state } from 'lit/decorators.js';
+import { LitElement, TemplateResult } from 'lit';
 import { Flat } from '../../../lib/src/index';
-import { Repository } from '../Repository';
+import { ApolloQueryController } from '@apollo-elements/core';
+
+const query = gql`
+  query {
+    latestFlats {
+      id
+      heading
+    }
+  }
+`;
 
 @customElement('main-page')
 export class MainPage extends LitElement {
@@ -9,6 +21,7 @@ export class MainPage extends LitElement {
       css`
         :host {
           display: flex;
+          flex-direction: column;
           justify-content: center;
 
           margin: 3%;
@@ -17,19 +30,19 @@ export class MainPage extends LitElement {
     ];
   }
 
-  private repo: Repository = new Repository('');
-  constructor() {
-    super();
-    this.repo.init().then(() => {
-      this.repo.getAll();
-    });
-  }
+  query = new ApolloQueryController(this, query);
+
   @state()
   entries: Flat[] = [];
 
-  render() {
+  render(): TemplateResult {
+    const result = this.query.data as any;
+    const flats = result?.latestFlats as Flat[];
     return html`
-      <div>${this.entries.map(e => html`<flat-entry></flat-entry>`)}</div>
+      <h1>Wohnungsgschichten</h1>
+      <div>
+        ${flats?.map((e: any) => html`<flat-entry .flat=${e}></flat-entry>`)}
+      </div>
     `;
   }
 }
