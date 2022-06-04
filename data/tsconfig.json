@@ -98,11 +98,5 @@
     // "skipDefaultLibCheck": true,                      /* Skip type checking .d.ts files that are included with TypeScript. */
     "skipLibCheck": true /* Skip type checking all .d.ts files. */
   },
-  "references": [
-    {
-      "path": "../lib"
-      // add 'prepend' if you want to include the referenced project in your output file
-      // "prepend": true
-    }
-  ]
+  "references": [{}]
 }

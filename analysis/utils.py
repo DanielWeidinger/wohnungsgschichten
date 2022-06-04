@@ -1,12 +1,11 @@
 from datetime import datetime
 import os
-from shutil import Error
 import googlemaps
 import matplotlib.pyplot as plt
 import pandas as pd
 from tqdm import tqdm
 
-departure = datetime.fromtimestamp(1652684400)
+departure = datetime.fromtimestamp(1655105400)
 gmaps = googlemaps.Client(key=os.environ['WOHNUNGSGSCHICHTEN_GMAPS_KEY'])
 
 indicies = ['distance_tu', 'distance_wu',
@@ -52,18 +51,21 @@ def get_dist(origin, destination, entry, key_name):
                                 mode="transit",
                                 departure_time=departure,
                                 region="at",
-                                alternatives=False)[0]['legs'][0]['duration']
+                                alternatives=False)
         if dist and len(dist) > 0:
+            dist = dist[0]['legs'][0]['duration']
             entry[key_name] = dist['value']
             entry[f"{key_name}_text"] = dist['text']
         else:
             print(f"No Directions found for {origin} to {destination}: {dist}")
-    except:
+    except Exception as e:
         print("GMaps API error is aufgetretten brudi!")
+        print(e)
 
 
 def get_dists_for_row(entry):
-    origin = f"{entry['address'] if 'address' in entry else ''} {entry['location']}"
+    origin = f"{entry['address'] if 'address' in entry and isinstance(entry['address'], str) else ''} {entry['location']}".strip(
+    )
     result = {}
     get_dist(origin, tu_destination, result, 'distance_tu')
     get_dist(origin, wu_destination, result, 'distance_wu')
