@@ -8,13 +8,12 @@ import { FlatsResolver } from "./graphql/resolvers/FlatsResolver";
 import { Middleware } from "./middlewares/Middleware";
 import { MongoClient } from "mongodb";
 import { SearchQueries } from "./SearchQueries";
-
 (async () => {
+  require("dotenv").config();
+
   Container.set(
     "mongo.client",
-    await MongoClient.connect(
-      `mongodb+srv://weidinger:${process.env.WOHNUNGSGSCHICHTEN_ATLAS_PW}@cluster0.sh9uc.mongodb.net/?retryWrites=true&w=majority`
-    )
+    await MongoClient.connect(process.env.MONGO_CONNECTION_STRING ?? "")
   );
   Container.set(
     "immo.query",

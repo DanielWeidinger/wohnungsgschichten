@@ -4,8 +4,7 @@ import numpy as np
 from MongoRepository import MongoRepository
 
 
-repo = MongoRepository(
-    f"mongodb+srv://weidinger:{os.environ['WOHNUNGSGSCHICHTEN_ATLAS_PW']}@cluster0.sh9uc.mongodb.net/?retryWrites=true&w=majority")
+repo = MongoRepository(str(os.getenv("MONGO_CONNECTION_STRING")))
 flats = repo.get_latest_flats()
 df = pd.DataFrame(flats)
 print(f"Got {len(flats)} entries")

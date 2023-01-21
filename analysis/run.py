@@ -1,11 +1,13 @@
 import os
 import pandas as pd
+from dotenv import load_dotenv
 
 from utils import add_dists, add_metrics, get_deviation_std_norm_dist, indicies
 from MongoRepository import MongoRepository
 
-repo = MongoRepository(
-    f"mongodb+srv://weidinger:{os.environ['WOHNUNGSGSCHICHTEN_ATLAS_PW']}@cluster0.sh9uc.mongodb.net/?retryWrites=true&w=majority")
+load_dotenv()
+
+repo = MongoRepository(str(os.getenv("MONGO_CONNECTION_STRING")))
 flats = repo.get_latest_flats()
 df = pd.DataFrame(flats)
 print(f"Got {len(flats)} entries")
