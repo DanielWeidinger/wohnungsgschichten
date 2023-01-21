@@ -4,9 +4,12 @@ import googlemaps
 import matplotlib.pyplot as plt
 import pandas as pd
 from tqdm import tqdm
+from dotenv import load_dotenv
 
-departure = datetime.fromtimestamp(1655105400)
-gmaps = googlemaps.Client(key=os.environ['WOHNUNGSGSCHICHTEN_GMAPS_KEY'])
+load_dotenv()
+
+departure = datetime.fromtimestamp(1676976925)
+gmaps = googlemaps.Client(key=os.getenv('GMAPS_KEY'))
 
 indicies = ['distance_tu', 'distance_wu',
             'distance_tu_text', 'distance_wu_text']
