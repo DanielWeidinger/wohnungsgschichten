@@ -11,7 +11,7 @@ export class MongoRepository implements IRepository<Flat> {
   private flatsCollection?: Collection<Flat>;
   private updatesCollection?: Collection<Update>;
 
-  constructor() {}
+  private constructor() {}
 
   static init(): MongoRepository {
     const repo = new MongoRepository();

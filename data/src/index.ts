@@ -7,7 +7,8 @@ import { App } from "./App";
 import { FlatsResolver } from "./graphql/resolvers/FlatsResolver";
 import { Middleware } from "./middlewares/Middleware";
 import { MongoClient } from "mongodb";
-import { SearchQueries } from "./SearchQueries";
+import searchQueries from "./search_queries.json";
+
 (async () => {
   require("dotenv").config();
 
@@ -15,10 +16,13 @@ import { SearchQueries } from "./SearchQueries";
     "mongo.client",
     await MongoClient.connect(process.env.MONGO_CONNECTION_STRING ?? "")
   );
-  Container.set(
-    "immo.query",
-    SearchQueries.SELECTED_DISTRICS_BETWEEN_600_AND_1000_3ROOMS
-  );
+  console.log(process.env.SEARCH_QUERY);
+  if (process.env.SEARCH_QUERY && process.env.SEARCH_QUERY in searchQueries) {
+    // @ts-ignore
+    Container.set("immo.query", searchQueries[process.env.SEARCH_QUERY]);
+  } else {
+    throw new Error("Search query not found");
+  }
 
   const app = new App(
     4000,

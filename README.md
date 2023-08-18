@@ -1,45 +1,38 @@
-# Gathering
+# Data Gathering
 
+nodejs based gathering with TypeDI
 Check data folder
-Basiert auf nodeJS
 
-Search basiert auf Searchqueries: Siehe SearchQueries.ts
+For available search queries in willhaben see: data/src/SearchQueries.ts
 
-## Wie kriegt man das zum laufen oida?
+## Setup
 
 step 4 step
+
 ```
 npm install
 npm run tsc
 npm run start
 ```
 
-Man muss den Scraper anhauen.
-Graphql Localhost 4000 und mutation fetchLatestFlasts.
+### Start scrapping
+
+- send mutation request to http://localhost:4000 with fetchLatestFlasts.
 
 ## Config
 
-.env file im data folder
-
-```
-MONGO_CONNECTION_STRING=xyz # MongoDB Connection String -> https://www.mongodb.com/docs/manual/reference/connection-string/
-```
-
+see data/.env.example
 
 # Analysis
 
-Check analysis ordner
-Basiert auf Python
+Outputs enriched CSV with ranked real-estate objects
 
-Erstellt ein CSV und enriched die Datenbank mit ausgewerteten Daten.
+Run with
 
-Manuell machen. (run.py)
+```python
+python run.py
+```
 
 ## Config
 
-.env file im analysis folder
-
-```
-MONGO_CONNECTION_STRING=xyz # MongoDB Connection String -> https://www.mongodb.com/docs/manual/reference/connection-string/
-GMAPS_KEY=xyz # Key für Google Maps Distanzmessung
-```
+see analysis/.env.example
