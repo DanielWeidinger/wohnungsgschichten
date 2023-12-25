@@ -30,17 +30,21 @@ RUN npm install --prefix=/app/data/
 # Compile source
 RUN npm run --prefix=/app/data/ tsc 
 
-
-# ## Data augmentation
-# COPY analysis analysis
-# # Setup CRON job
-# RUN apt-get install -y cron
-# # Add cron job
-# RUN echo "* * * * * curl http://localhost:3000/graphql" >> /etc/crontab
-# # Start cron service
-# CMD cron -f
+## Data augmentation
+COPY fetch_job.sh fetch_job.sh
+COPY analytics analytics
+RUN pip3 install -r /app/analytics/requirements.txt
+# Setup CRON job
+RUN apt-get install -y cron
+# Add cron job
+COPY cron_job /etc/cron.d/fetch_job
+# Give execution rights on the cron job
+RUN chmod 0644 /etc/cron.d/fetch_job
+# Apply cron job
+RUN crontab /etc/cron.d/fetch_job
 
 # Expose port (if needed)
 EXPOSE 4000
 # Start the application
-CMD [ "npm", "start", "--prefix=/app/data" ]
+COPY start.sh start.sh
+ENTRYPOINT [ "./start.sh" ]

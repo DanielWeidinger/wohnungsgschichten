@@ -1,0 +1,2 @@
+0 2,14 * * * /app/fetch_job.sh >> /var/log/cron.log 2>&1
+
