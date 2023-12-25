@@ -5,10 +5,6 @@ import { AdvertStatus, Child, Flat } from "../../models/Flat";
 export class FlatQL implements Flat {
   @Field() id!: string;
   @Field() lastCheck!: Date;
-  @Field() distance_tu!: number;
-  @Field() distance_wu!: number;
-  @Field() distance_tu_text!: string;
-  @Field() distance_wu_text!: string;
   @Field() verticalId!: number;
   @Field() adTypeId!: number;
   @Field() productId!: number;

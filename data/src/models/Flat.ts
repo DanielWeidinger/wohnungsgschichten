@@ -35,10 +35,6 @@ export interface Child {
 export interface Flat {
   id: string;
   lastCheck: Date;
-  distance_tu: number;
-  distance_wu: number;
-  distance_tu_text: string;
-  distance_wu_text: string;
   verticalId: number;
   adTypeId: number;
   productId: number;
