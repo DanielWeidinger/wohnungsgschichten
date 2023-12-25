@@ -1,17 +1,18 @@
 import os
 import pandas as pd
-from dotenv import load_dotenv
 from MongoRepository import MongoRepository
+from utils.POI import POI
 from utils.geo import POIs_to_indicies, annotate_data_dist
-
+from dotenv import load_dotenv
 load_dotenv()
+
 
 repo = MongoRepository(str(os.getenv("MONGO_CONNECTION_STRING")))
 flats = repo.get_latest_flats()
 df = pd.DataFrame(flats)
 print(f"Got {len(flats)} entries")
 
-POIs = []
+POIs = [POI("TU_Wien", "Technische Universität Wien Karlsplatz 13, 1040 Wien")]
 
 indices = POIs_to_indicies(POIs)
 annotate_data_dist(df, POIs)

@@ -1,12 +1,19 @@
+from utils.datetime import get_timestamp_of_current_weekday
+from utils.POI import POIs_to_indicies
 import os
 import pandas as pd
 import googlemaps
 from tqdm import tqdm
 from datetime import datetime
+from dotenv import load_dotenv
 
-from utils.POI import POIs_to_indicies
+load_dotenv()
 
-long_departure = int(os.environ.get("GMAPS_DEPARTURE", 0))
+
+# Default tuesday at 09:00
+time_obj = get_timestamp_of_current_weekday(int(os.environ.get("GMAPS_DEPARTURE_WEEKDAY", 1)),
+                                            datetime.strptime(os.environ.get("GMAPS_DEPARTURE_TIME", "09:00"), "%H:%M").time())
+long_departure = int(time_obj)
 departure = datetime.fromtimestamp(long_departure)
 gmaps = googlemaps.Client(key=os.getenv('GMAPS_KEY'))
 
@@ -14,17 +21,18 @@ gmaps = googlemaps.Client(key=os.getenv('GMAPS_KEY'))
 def annotate_data_dist(df, POIs):
     # Add distance columns if not present
     indices = POIs_to_indicies(POIs)
-    if indices not in df.columns:
+    if all(~df.columns.isin(indices)):
         print('Add distance column for processing')
         df[indices] = None
 
     affected_entries = df[indices].isnull()
-    if affected_entries.any():
-        df_no_distance = df[affected_entries]
+    if any(affected_entries.any()):
+        df_no_distance = df.loc[affected_entries.any(axis=1)]
 
         print(f"{len(df_no_distance)} entries with no distance found")
         df_with_distance = add_dists(df_no_distance, POIs)
-        df.loc[affected_entries, indices] = df_with_distance[indices]
+        df.loc[affected_entries.any(
+            axis=1), indices] = df_with_distance[indices]
 
     return df
 
@@ -51,9 +59,12 @@ def get_dist(origin, destination, entry, key_name, mode="transit"):
 def get_dists_for_row(entry, POIs: list):
     origin = f"{entry['address'] if 'address' in entry and isinstance(entry['address'], str) else ''} {entry['location']}".strip(
     )
+    # if isinstance(origin, str) and origin ==:
+    #     raise Exception(
+    #         f"One or more of your provided POIs could not be found")
     result = {}
     for poi in POIs:
-        get_dist(origin, poi.address, result, f"distance_{poi.get_name()}")
+        get_dist(origin, poi.address, result, f"{poi.get_name()}")
 
     return result
 
